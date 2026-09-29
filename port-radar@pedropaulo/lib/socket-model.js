@@ -7,11 +7,13 @@ function socketIdentity(record) {
     return [record.protocol, record.family, record.address, record.port, processPart].join("|");
 }
 
+// Leave process details out so we can detect a new owner at the same endpoint.
 function socketEndpointKey(record) {
     return [record.protocol, record.family, record.address, record.port].join("|");
 }
 
 function createSocketRecord(values) {
+    // Sort a copy so comparisons stay stable without changing the parser input.
     let processes = (values.processes || []).slice().sort(function (a, b) {
         return a.name.localeCompare(b.name) || (a.pid || 0) - (b.pid || 0);
     });

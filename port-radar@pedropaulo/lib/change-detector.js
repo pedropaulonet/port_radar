@@ -2,6 +2,7 @@ const Model = typeof require === "function"
     ? require("./lib/socket-model")
     : imports["socket-model"];
 
+// A different output order should not look like a change of process.
 function ownershipSignature(records) {
     return records.map(function (record) {
         return record.processes.map(function (process) {
@@ -39,6 +40,8 @@ function compareSnapshots(previous, current) {
             changes.push({ type: "closed", record: oldEndpoints[key][0], key: key });
     });
 
+    // Treat an address move as one event only when there is one socket on each side.
+    // With several bindings, keep the individual open/close events instead of guessing.
     let bindingKey = function (record) {
         return [record.protocol, record.family, record.port].join("|");
     };

@@ -9,7 +9,7 @@ function parseEndpoint(value) {
     let separator = value.lastIndexOf(":");
     if (separator < 0)
         return null;
-    // ss can place the interface scope outside IPv6 brackets: [fe80::1]%eth0.
+    // Keep the interface suffix when ss prints an address such as [fe80::1]%eth0.
     let address = value.substring(0, separator).replace(/^\[([^\]]+)\](.*)$/, "$1$2");
     let portText = value.substring(separator + 1);
     if (!/^\d+$/.test(portText))
@@ -37,6 +37,7 @@ function parseLine(line, family) {
     let fields = line.trim().split(/\s+/);
     if (fields.length < 5)
         return null;
+    // Some ss output includes a protocol column before the socket state.
     let netid = /^(tcp|udp)$/i.test(fields[0]) ? fields.shift().toUpperCase() : null;
     let state = fields[0].toUpperCase();
     let protocol = null;
@@ -51,6 +52,7 @@ function parseLine(line, family) {
     let endpoint = parseEndpoint(fields[3]);
     if (!endpoint)
         return null;
+    // Process details may be absent when the current user cannot read them.
     let processField = fields.slice(5).join(" ");
     return Model.createSocketRecord({
         protocol: protocol,

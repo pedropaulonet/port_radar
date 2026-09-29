@@ -4,6 +4,7 @@ const Parser = typeof require === "function"
     ? require("./lib/parser")
     : imports.parser;
 
+// Pass arguments directly to ss; no shell or name lookups are needed.
 function createScanArgv(executable, family) {
     return [executable || "/usr/bin/ss", "-H", "-lntup", "-n", family === "IPv6" ? "-6" : "-4"];
 }
@@ -27,6 +28,7 @@ var TcpScanner = class {
         let cancellable = new Gio.Cancellable();
         this._cancellable = cancellable;
         let records = [];
+        // Ignore replies from a cancelled scan, including replies after a timeout.
         const finish = (error) => {
             if (this._cancellable !== cancellable)
                 return;
@@ -38,6 +40,7 @@ var TcpScanner = class {
             callback(error ? [] : records, error);
         };
 
+        // Both address families share this deadline.
         this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 10, () => {
             this._timeout = null;
             if (this._subprocess)
@@ -62,7 +65,7 @@ var TcpScanner = class {
                             return;
                         }
                         records = records.concat(Parser.parseSsOutput(stdout || "", family));
-                        // Separate queries retain the family even when ss prints a wildcard address.
+                        // Query each family separately: a wildcard address alone cannot tell us which it is.
                         if (family === "IPv4")
                             readFamily("IPv6");
                         else

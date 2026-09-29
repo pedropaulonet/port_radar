@@ -31,7 +31,7 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         this._ready = false;
         this._compatible = parseInt(Config.PACKAGE_VERSION, 10) >= 6;
 
-        // Keep applet modules scoped to Cinnamon's loader so reloads pick up changes.
+        // Use Cinnamon's loader so reloading the applet also reloads these modules.
         const Scanner = require("./lib/scanner");
         const ChangeDetector = require("./lib/change-detector");
         this._compareSnapshots = ChangeDetector.compareSnapshots;
@@ -94,6 +94,7 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         aboutItem.connect("activate", () => this.openAbout());
         this.menu.addMenuItem(aboutItem);
 
+        // Settings callbacks can run during setup; wait until the menu is ready.
         this._ready = true;
         this._settingsChanged();
         this.refresh();
@@ -134,6 +135,7 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
     refresh() {
         if (this._destroyed)
             return;
+        // Several refresh requests during a scan only need one follow-up scan.
         if (this._scanInProgress) {
             this._refreshPending = true;
             return;
@@ -174,12 +176,13 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         this._records = records;
         this._hasSnapshot = true;
         this._lastUpdated = GLib.DateTime.new_now_local().format("%H:%M:%S");
+        // The first scan is our baseline, not a batch of newly opened ports.
         if (hadSnapshot) {
             try {
                 let detected = this._compareSnapshots(previous, records);
                 this._changes = detected.concat(this._changes).slice(0, 8);
             } catch (error) {
-                // History is secondary: a failed comparison must not discard a fresh scan.
+                // Keep the fresh results even if updating the history fails.
                 global.logError(error);
             }
         }
@@ -224,12 +227,14 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         }));
     }
 
+    // The panel count follows settings, not the search or temporary menu filter.
     _enabledRecords() {
         return this._records.filter(record =>
             (this.showUdp || record.protocol !== "UDP") &&
             (this.showIpv6 || record.family !== "IPv6"));
     }
 
+    // Show IPv4 and IPv6 under one port, but keep TCP and UDP separate.
     _groupPorts(records) {
         let groups = new Map();
         records.forEach(record => {
@@ -336,6 +341,7 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
     }
 
     on_applet_removed_from_panel() {
+        // Async replies may still arrive after the applet leaves the panel.
         this._destroyed = true;
         if (this._scanTimer !== null)
             Mainloop.source_remove(this._scanTimer);
