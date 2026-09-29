@@ -1,0 +1,6 @@
+LISTEN 0      128        127.0.0.1:8080      0.0.0.0:*    users:(("python",pid=1234,fd=3))
+LISTEN 0      4096       0.0.0.0:80          0.0.0.0:*    users:(("nginx",pid=55,fd=6),("worker",pid=56,fd=6))
+LISTEN 0      128        [::1]:631           [::]:*       users:(("cupsd",pid=77,fd=8))
+LISTEN 0      128        127.0.0.1:5432      0.0.0.0:*
+not-a-socket line
+

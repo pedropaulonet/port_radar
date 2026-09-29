@@ -1,0 +1,27 @@
+# Local notes and development tools
+/prompt.md
+/docs/superpowers/
+/.agents/
+/.codex/
+/.claude/
+/.cursor/
+/AGENTS.md
+/CLAUDE.md
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Generated files and local configuration
+*.mo
+*.log
+__pycache__/
+.env
+.env.*
+!.env.example
+/dist/

@@ -1,0 +1,212 @@
+# Port Radar translations.
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+msgid ""
+msgstr "Project-Id-Version: Port Radar 0.4.1\nReport-Msgid-Bugs-To: \nPO-Revision-Date: 2026-09-29 12:00+0000\nLast-Translator: Pedro Paulo\nLanguage-Team: pt\nLanguage: pt\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Port Radar — local sockets"
+msgstr "Port Radar — portas locais"
+
+msgid "PORT RADAR"
+msgstr "PORT RADAR"
+
+msgid "Scanning…"
+msgstr "Consultando…"
+
+msgid "Search port, process, address or PID"
+msgstr "Buscar porta, processo, endereço ou PID"
+
+msgid "All sockets"
+msgstr "Todas as portas"
+
+msgid "Loopback only"
+msgstr "Somente loopback"
+
+msgid "Non-loopback"
+msgstr "Outras interfaces"
+
+msgid "RECENT CHANGES"
+msgstr "ALTERAÇÕES RECENTES"
+
+msgid "LOCAL SOCKETS"
+msgstr "PORTAS LOCAIS"
+
+msgid "Refresh now"
+msgstr "Atualizar agora"
+
+msgid "About Port Radar"
+msgstr "Sobre o Port Radar"
+
+msgid "Scanning local sockets…"
+msgstr "Consultando as portas locais…"
+
+msgid "Process unavailable"
+msgstr "Processo não identificado"
+
+msgid "Install iproute2 to read local ports, then refresh."
+msgstr "Instale o iproute2 para consultar as portas e atualize a lista."
+
+msgid "Port Radar requires Cinnamon 6.0 or later."
+msgstr "O Port Radar requer Cinnamon 6.0 ou superior."
+
+msgid "Reading ports took too long. Try refreshing."
+msgstr "A consulta demorou mais que o esperado. Tente atualizar."
+
+msgid "Could not read local ports. Try running ss -lntup in a terminal."
+msgstr "Não foi possível consultar as portas. Execute ss -lntup no terminal para conferir."
+
+#, javascript-format
+msgid "%d sockets detected · %d shown"
+msgstr "%d sockets encontrados · %d exibidos"
+
+msgid "No local sockets detected"
+msgstr "Nenhuma porta local encontrada"
+
+msgid "No sockets match this search and filter"
+msgstr "Nenhuma porta corresponde à busca e ao filtro"
+
+#, javascript-format
+msgid "Address: %s"
+msgstr "Endereço: %s"
+
+#, javascript-format
+msgid "Family: %s"
+msgstr "Família: %s"
+
+#, javascript-format
+msgid "Process: %s"
+msgstr "Processo: %s"
+
+msgid "PID unavailable"
+msgstr "PID não disponível"
+
+#, javascript-format
+msgid "Showing %d of %d sockets"
+msgstr "Exibindo %d de %d sockets"
+
+msgid "No recent changes"
+msgstr "Nenhuma alteração recente"
+
+msgid "OPENED"
+msgstr "ABERTO"
+
+msgid "CLOSED"
+msgstr "FECHADO"
+
+msgid "PROCESS CHANGED"
+msgstr "PROCESSO ALTERADO"
+
+msgid "BINDING CHANGED"
+msgstr "ENDEREÇO ALTERADO"
+
+msgid "General"
+msgstr "Geral"
+
+msgid "Monitoring"
+msgstr "Monitoramento"
+
+msgid "Panel display"
+msgstr "Painel"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "5 seconds"
+msgstr "5 segundos"
+
+msgid "10 seconds"
+msgstr "10 segundos"
+
+msgid "30 seconds"
+msgstr "30 segundos"
+
+msgid "60 seconds"
+msgstr "60 segundos"
+
+msgid "How often to refresh the socket list"
+msgstr "Intervalo de atualização da lista"
+
+msgid "Maximum number of sockets shown in the popup"
+msgstr "Limite de sockets exibidos no menu"
+
+msgid "Show the number of listening sockets in the panel"
+msgstr "Mostrar a quantidade de sockets no painel"
+
+msgid "Include locally bound UDP sockets"
+msgstr "Incluir sockets UDP locais"
+
+msgid "Include IPv6 sockets"
+msgstr "Incluir sockets IPv6"
+
+msgid "See which local ports are in use and which processes own them."
+msgstr "Veja quais portas locais estão em uso e os processos associados a elas."
+
+msgid "By Pedro Paulo · GPL-3.0-or-later\nRequires Cinnamon 6.0 or later and iproute2."
+msgstr "Por Pedro Paulo · GPL-3.0-or-later\nRequer Cinnamon 6.0 ou superior e iproute2."
+
+msgid "TCP"
+msgstr "TCP"
+
+msgid "UDP"
+msgstr "UDP"
+
+msgid "IPv4"
+msgstr "IPv4"
+
+msgid "IPv6"
+msgstr "IPv6"
+
+msgid "Port Radar"
+msgstr "Port Radar"
+
+#, javascript-format
+msgid "%s  ·  %d  ·  %s"
+msgstr "%s  ·  %d  ·  %s"
+
+#, javascript-format
+msgid "%s  %s %d  ·  %s"
+msgstr "%s  %s %d  ·  %s"
+
+
+msgid "Process details may require additional permissions."
+msgstr "Os detalhes de alguns processos podem exigir mais permissões."
+
+#, javascript-format
+msgid "Last successful update: %s"
+msgstr "Última atualização concluída: %s"
+
+msgid "All ports"
+msgstr "Todas as portas"
+
+msgid "Recent changes"
+msgstr "Alterações recentes"
+
+#, javascript-format
+msgid "Recent changes (%d)"
+msgstr "Alterações recentes (%d)"
+
+#, javascript-format
+msgid "Updated at %s"
+msgstr "Atualizado às %s"
+
+#, javascript-format
+msgid "%d ports in use"
+msgstr "%d portas em uso"
+
+#, javascript-format
+msgid "%d of %d ports"
+msgstr "%d de %d portas"
+
+#, javascript-format
+msgid "Showing %d of %d ports"
+msgstr "Exibindo %d de %d portas"
+
+#, javascript-format
+msgid "Port Radar · %d ports in use"
+msgstr "Port Radar · %d portas em uso"
+
+msgid "Maximum number of ports shown in the menu"
+msgstr "Limite de portas exibidas no menu"
+
+msgid "Show the number of ports in use in the panel"
+msgstr "Mostrar a quantidade de portas em uso no painel"

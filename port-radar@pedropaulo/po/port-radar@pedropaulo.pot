@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Pedro Paulo
+# This file is distributed under the same license as the Port Radar package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Port Radar 0.4.1\n"
+"Report-Msgid-Bugs-To: https://github.com/linuxmint/cinnamon-spices-applets/"
+"issues\n"
+"POT-Creation-Date: 2026-09-29 09:53-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Port Radar — local sockets"
+msgstr ""
+
+msgid "Port Radar"
+msgstr ""
+
+msgid "Scanning…"
+msgstr ""
+
+msgid "Search port, process, address or PID"
+msgstr ""
+
+msgid "All ports"
+msgstr ""
+
+msgid "TCP"
+msgstr ""
+
+msgid "UDP"
+msgstr ""
+
+msgid "IPv4"
+msgstr ""
+
+msgid "IPv6"
+msgstr ""
+
+msgid "Loopback only"
+msgstr ""
+
+msgid "Non-loopback"
+msgstr ""
+
+msgid "Recent changes"
+msgstr ""
+
+msgid "Refresh now"
+msgstr ""
+
+msgid "About Port Radar"
+msgstr ""
+
+msgid "Scanning local sockets…"
+msgstr ""
+
+#, javascript-format
+msgid "Updated at %s"
+msgstr ""
+
+msgid "Install iproute2 to read local ports, then refresh."
+msgstr ""
+
+msgid "Port Radar requires Cinnamon 6.0 or later."
+msgstr ""
+
+msgid "Reading ports took too long. Try refreshing."
+msgstr ""
+
+msgid "Could not read local ports. Try running ss -lntup in a terminal."
+msgstr ""
+
+#, javascript-format
+msgid "%d ports in use"
+msgstr ""
+
+#, javascript-format
+msgid "%d of %d ports"
+msgstr ""
+
+msgid "No local sockets detected"
+msgstr ""
+
+msgid "No sockets match this search and filter"
+msgstr ""
+
+#, javascript-format
+msgid "Showing %d of %d ports"
+msgstr ""
+
+#, javascript-format
+msgid "Recent changes (%d)"
+msgstr ""
+
+msgid "OPENED"
+msgstr ""
+
+msgid "CLOSED"
+msgstr ""
+
+msgid "PROCESS CHANGED"
+msgstr ""
+
+msgid "BINDING CHANGED"
+msgstr ""
+
+#, javascript-format
+msgid "%s  %s %d  ·  %s"
+msgstr ""
+
+#, javascript-format
+msgid "Port Radar · %d ports in use"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "5 seconds"
+msgstr ""
+
+msgid "10 seconds"
+msgstr ""
+
+msgid "30 seconds"
+msgstr ""
+
+msgid "60 seconds"
+msgstr ""
+
+msgid "How often to refresh the socket list"
+msgstr ""
+
+msgid "Maximum number of ports shown in the menu"
+msgstr ""
+
+msgid "Show the number of ports in use in the panel"
+msgstr ""
+
+msgid "Include locally bound UDP sockets"
+msgstr ""
+
+msgid "Include IPv6 sockets"
+msgstr ""
+
+msgid "See which local ports are in use and which processes own them."
+msgstr ""
