@@ -44,11 +44,13 @@ Pulsa el icono, busca o filtra la lista y abre una entrada para ver su direcció
 
 El idioma sigue el de tu sesión: español (`es`), portugués (`pt`, `pt_BR`) o inglés (`en`, también usado como alternativa). Inicia una nueva sesión después de cambiar el idioma del sistema.
 
+En los detalles puedes copiar el puerto, la dirección y el PID. Los detalles abiertos se conservan durante las actualizaciones.
+
 ## Cómo interpretar los resultados
 
 Cada entrada y unidad del contador representa un par protocolo/puerto. Las direcciones IPv4 e IPv6 se agrupan; TCP y UDP siguen separados. El contador respeta las opciones de UDP e IPv6, independientemente de la búsqueda y el filtro temporal del menú. Los cambios recientes aparecen plegados y se ocultan si no hay eventos. TCP muestra sockets en `LISTEN`; UDP muestra sockets locales sin conexión. UDP no tiene el estado `LISTEN` de TCP.
 
-Cuando Linux no proporciona nombre y PID, la entrada muestra solo el puerto y el protocolo. Las direcciones y los datos disponibles aparecen al expandirla, sin avisos permanentes de permisos ni campos vacíos. Es habitual con procesos de otro usuario y puertos publicados por Docker/DDEV; el PID del contenedor no se presenta como propietario del socket del host. Una dirección que no sea loopback no demuestra que exista acceso desde internet: también intervienen el cortafuegos, las rutas y la configuración del servicio. El historial solo se conserva durante la sesión del applet y refleja diferencias entre consultas; los sockets que duran muy poco pueden pasar inadvertidos.
+Cuando Linux no proporciona nombre y PID, la entrada muestra solo el puerto y el protocolo. Las direcciones y los datos disponibles aparecen al expandirla, sin avisos permanentes de permisos ni campos vacíos. Es habitual con procesos de otro usuario y puertos publicados por Docker; el PID del contenedor no se presenta como propietario del socket del host. Una dirección que no sea loopback no demuestra que exista acceso desde internet: también intervienen el cortafuegos, las rutas y la configuración del servicio. El historial solo se conserva durante la sesión del applet y refleja diferencias entre consultas; los sockets que duran muy poco pueden pasar inadvertidos.
 
 Si una consulta falla, la lista se oculta y el contador opcional muestra `!`. Se conserva el historial anterior. El applet ejecuta `ss` localmente; no cierra procesos, no modifica el cortafuegos ni envía los resultados a servicios externos.
 
@@ -59,11 +61,7 @@ Comprueba `cinnamon --version` y `ss -lntup` en una terminal. Si falta `ss`, ins
 Desde la raíz del repositorio, ejecuta las comprobaciones breves:
 
 ```bash
-cjs port-radar@pedropaulo/tests/parser-tests.js
-cjs port-radar@pedropaulo/tests/scanner-tests.js
-cjs port-radar@pedropaulo/tests/changes-tests.js
-cjs port-radar@pedropaulo/tests/module-loading-tests.js
-cjs port-radar@pedropaulo/tests/refresh-tests.js
+bash port-radar@pedropaulo/tests/run-tests.sh
 ```
 
 Antes de publicar, revisa en Cinnamon el menú, la búsqueda, los filtros, la configuración, la actualización, los créditos y la retirada y adición del applet. Revisa también los idiomas en sus sesiones correspondientes. Las pruebas de módulos no sustituyen la revisión del panel.

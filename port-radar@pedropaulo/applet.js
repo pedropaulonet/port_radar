@@ -24,6 +24,8 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         this._lastUpdated = null;
         this._scanTimer = null;
         this._records = [];
+        this._socketItems = new Map();
+        this._socketViewSignature = null;
         this._changes = [];
         this._hasSnapshot = false;
         this._scanError = null;
@@ -156,6 +158,8 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
             this._scanInProgress = false;
             if (error) {
                 this._scanError = error.code || "scan-failed";
+                global.logError(new Error("Port Radar [" + this._scanError + "]: " +
+                    (error.message || this._scanErrorMessage())));
                 this._status.actor.add_style_class_name("port-radar-error");
             } else {
                 this._acceptSnapshot(records);
@@ -250,22 +254,21 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
     _render() {
         if (!this._status || this._scanInProgress)
             return;
-        this._socketSection.removeAll();
+        this._moveFocusBeforeClearing(this._changesSection);
         this._changesSection.removeAll();
 
         if (this._lastUpdated) {
-            this._updated.label.set_text(_("Updated at %s").format(this._lastUpdated));
+            this._updated.label.set_text((this._scanError
+                ? _("Last successful update: %s") : _("Updated at %s")).format(this._lastUpdated));
             this._updated.actor.show();
         }
         this._renderChanges();
         if (this._scanError) {
-            let messages = {
-                "missing-dependency": _("Install iproute2 to read local ports, then refresh."),
-                "unsupported-version": _("Port Radar requires Cinnamon 6.0 or later."),
-                "timeout": _("Reading ports took too long. Try refreshing."),
-                "scan-failed": _("Could not read local ports. Try running ss -lntup in a terminal.")
-            };
-            this._status.label.set_text(messages[this._scanError] || messages["scan-failed"]);
+            this._moveFocusBeforeClearing(this._socketSection);
+            this._socketSection.removeAll();
+            this._socketItems.clear();
+            this._socketViewSignature = null;
+            this._status.label.set_text(this._scanErrorMessage());
             return;
         }
 
@@ -275,6 +278,24 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
             ? _("%d ports in use").format(total)
             : _("%d of %d ports").format(groups.length, total));
 
+        let limit = Math.max(1, Number(this.maxEntries) || 50);
+        let visibleGroups = groups.slice(0, limit);
+        let signature = JSON.stringify([groups.length, limit, groups.length === 0 && total === 0, visibleGroups.map(group =>
+            [group.protocol, group.port, group.records.map(record => record.identity).sort()])]);
+        // Keep the existing widgets (and keyboard focus) when only the update
+        // time changed. Record order from ss does not affect this comparison.
+        if (signature === this._socketViewSignature)
+            return;
+        let expanded = new Set();
+        this._socketItems.forEach((item, key) => {
+            if (item.menu.isOpen)
+                expanded.add(key);
+        });
+        this._moveFocusBeforeClearing(this._socketSection);
+        this._socketSection.removeAll();
+        this._socketItems.clear();
+        this._socketViewSignature = signature;
+
         if (!groups.length) {
             let text = total === 0 ? _("No local sockets detected") : _("No sockets match this search and filter");
             this._socketSection.addMenuItem(new PopupMenu.PopupMenuItem(text,
@@ -282,34 +303,59 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
             return;
         }
 
-        let limit = Math.max(1, Number(this.maxEntries) || 50);
-        groups.slice(0, limit).forEach(group => {
+        visibleGroups.forEach(group => {
             let names = [...new Set(group.records.flatMap(record => record.processes.map(process => process.name)))];
             let title = group.port + " · " + group.protocol;
             if (names.length)
                 title += " · " + names.join(", ");
             let item = new PopupMenu.PopupSubMenuMenuItem(title);
             item.actor.add_style_class_name("port-radar-socket");
+            this._addCopyAction(item.menu, _("Copy port"), group.port);
             group.records.forEach((record, index) => {
                 if (index > 0)
                     item.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
                 item.menu.addMenuItem(new PopupMenu.PopupMenuItem(record.address + " · " + record.family,
                     { reactive: false, style_class: "port-radar-detail" }));
+                this._addCopyAction(item.menu, _("Copy address: %s").format(record.address), record.address);
                 record.processes.forEach(process => {
                     let detail = process.name;
                     if (process.pid !== null)
                         detail += " · PID " + process.pid;
                     item.menu.addMenuItem(new PopupMenu.PopupMenuItem(detail,
                         { reactive: false, style_class: "port-radar-detail" }));
+                    if (process.pid !== null)
+                        this._addCopyAction(item.menu, _("Copy PID: %d").format(process.pid), process.pid);
                 });
             });
             this._socketSection.addMenuItem(item);
+            let key = group.protocol + ":" + group.port;
+            this._socketItems.set(key, item);
+            if (expanded.has(key))
+                item.menu.open(false);
         });
         if (groups.length > limit) {
             this._socketSection.addMenuItem(new PopupMenu.PopupMenuItem(
                 _("Showing %d of %d ports").format(limit, groups.length),
                 { reactive: false, style_class: "port-radar-empty" }));
         }
+    }
+
+    _moveFocusBeforeClearing(section) {
+        if (!this.menu.isOpen)
+            return;
+        let focus = global.stage.get_key_focus();
+        // Cinnamon closes the popup when a focused actor is destroyed and
+        // focus becomes null. Park it on a surviving actor inside the menu.
+        if (focus && section.actor.contains(focus))
+            this.menu.actor.grab_key_focus();
+    }
+
+    _addCopyAction(menu, label, value) {
+        let item = new PopupMenu.PopupMenuItem(label);
+        item.connect("activate", () => {
+            St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, String(value));
+        });
+        menu.addMenuItem(item);
     }
 
     _renderChanges() {
@@ -327,10 +373,24 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
         }));
     }
 
+    _scanErrorMessage() {
+        let messages = {
+            "missing-dependency": _("Install iproute2 to read local ports, then refresh."),
+            "unsupported-version": _("Port Radar requires Cinnamon 6.0 or later."),
+            "timeout": _("Reading ports took too long. Try refreshing."),
+            "scan-failed": _("Could not read local ports. Try running ss -lntup in a terminal.")
+        };
+        return messages[this._scanError] || messages["scan-failed"];
+    }
+
     _updatePanelLabel() {
         let count = this._groupPorts(this._enabledRecords()).length;
         this.set_applet_label(this.showCount ? (this._scanError ? "!" : String(count)) : "");
-        this.set_applet_tooltip(_("Port Radar · %d ports in use").format(count));
+        let tooltip = this._scanError ? _("Port Radar") + " · " + this._scanErrorMessage()
+            : _("Port Radar · %d ports in use").format(count);
+        if (this._scanError && this._lastUpdated)
+            tooltip += "\n" + _("Last successful update: %s").format(this._lastUpdated);
+        this.set_applet_tooltip(tooltip);
     }
 
     on_applet_clicked() {
@@ -341,11 +401,19 @@ var PortRadarApplet = class extends Applet.TextIconApplet {
     }
 
     on_applet_removed_from_panel() {
+        if (this._destroyed)
+            return;
         // Async replies may still arrive after the applet leaves the panel.
         this._destroyed = true;
         if (this._scanTimer !== null)
             Mainloop.source_remove(this._scanTimer);
+        this._scanTimer = null;
+        this._refreshPending = false;
         this._scanner.cancel();
+        // Closing releases the modal grab. Destroying removes the actor from
+        // Cinnamon's global UI group and disconnects its menu manager.
+        this.menu.close(false);
+        this.menu.destroy();
         this.settings.finalize();
     }
 };

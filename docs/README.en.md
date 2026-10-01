@@ -40,7 +40,7 @@ Open **System Settings → Applets**, find **Port Radar** and add it to the pane
 
 ## Everyday use
 
-Click the icon, search or filter the list, and expand an entry to see its address, IP family, process and PID. **Refresh now** runs a new query. Opening the menu also refreshes it, including in manual mode. The last successful update time appears at the top, and a refresh requested during a scan runs afterwards. Right-click the icon and choose **Configure** to change the refresh interval and display options. **About Port Radar** shows the version and credits.
+Click the icon, search or filter the list, and expand an entry to see its address, IP family, process and PID. Use the detail actions to copy a port, address or PID. Expanded port details stay open during updates. **Refresh now** runs a new query. Opening the menu also refreshes it, including in manual mode. The last successful update time appears at the top, and a refresh requested during a scan runs afterwards. Right-click the icon and choose **Configure** to change the refresh interval and display options. **About Port Radar** shows the version and credits.
 
 The applet follows your session language: Portuguese (`pt`, `pt_BR`), Spanish (`es`) or English (`en`, also the fallback). Start a new session after changing your system language.
 
@@ -48,7 +48,7 @@ The applet follows your session language: Portuguese (`pt`, `pt_BR`), Spanish (`
 
 Each row and counter unit represents one protocol/port pair. IPv4 and IPv6 addresses are grouped, while TCP and UDP stay separate. The counter follows the UDP and IPv6 settings, independently of the temporary menu search and filter. Recent changes are collapsed and hidden when empty. TCP entries are in `LISTEN`; UDP entries are locally bound and unconnected. UDP has no TCP-style `LISTEN` state.
 
-When Linux omits process details, the row shows just the port and protocol. Addresses and available process details appear when expanded, without permanent permission notices or empty fields. This is common for another user’s sockets and Docker/DDEV published ports; container PIDs are not presented as host socket owners. A non-loopback address does not prove internet access: firewalls, routing and service settings still apply. History exists only for the current applet session and records changes between queries, so short-lived sockets can be missed.
+When Linux omits process details, the row shows just the port and protocol. Addresses and available process details appear when expanded, without permanent permission notices or empty fields. This is common for another user’s sockets and Docker published ports; container PIDs are not presented as host socket owners. A non-loopback address does not prove internet access: firewalls, routing and service settings still apply. History exists only for the current applet session and records changes between queries, so short-lived sockets can be missed.
 
 On a query failure, the list is hidden and the optional panel counter shows `!`. Previous history remains available. The applet runs `ss` locally; it does not terminate processes, change firewall rules or send results to external services.
 
@@ -59,11 +59,7 @@ Check `cinnamon --version` and `ss -lntup` in a terminal. Install `iproute2` if 
 Run the short checks from the repository root:
 
 ```bash
-cjs port-radar@pedropaulo/tests/parser-tests.js
-cjs port-radar@pedropaulo/tests/scanner-tests.js
-cjs port-radar@pedropaulo/tests/changes-tests.js
-cjs port-radar@pedropaulo/tests/module-loading-tests.js
-cjs port-radar@pedropaulo/tests/refresh-tests.js
+bash port-radar@pedropaulo/tests/run-tests.sh
 ```
 
 Before releasing, check the menu, search, filters, settings, refresh, About and removal/re-addition inside Cinnamon. Check the supported languages in their respective sessions. Module checks do not replace panel testing.

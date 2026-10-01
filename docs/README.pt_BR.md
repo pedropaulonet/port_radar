@@ -70,7 +70,7 @@ O instalador verifica as dependências e a versão do Cinnamon, copia o applet p
 
 ## Como usar
 
-Clique no ícone para abrir a lista. A lista agrupa cada número de porta por protocolo e mostra o processo somente quando identificado. Use a busca e os filtros para encontrar uma porta; expanda a entrada para consultar os endereços e os dados de processo disponíveis. O histórico fica recolhido em **Alterações recentes** e só aparece quando há eventos. **Atualizar agora** faz uma nova consulta. Abrir o menu também atualiza a lista, inclusive no modo manual. O horário da última atualização concluída aparece no topo; uma solicitação feita durante outra consulta é executada logo depois.
+Clique no ícone para abrir a lista. A lista agrupa cada número de porta por protocolo e mostra o processo somente quando identificado. Use a busca e os filtros para encontrar uma porta; expanda a entrada para consultar os endereços e os dados de processo disponíveis. Nos detalhes, use as ações para copiar porta, endereço e PID. Os detalhes abertos são preservados durante as atualizações. O histórico fica recolhido em **Alterações recentes** e só aparece quando há eventos. **Atualizar agora** faz uma nova consulta. Abrir o menu também atualiza a lista, inclusive no modo manual. O horário da última atualização concluída aparece no topo; uma solicitação feita durante outra consulta é executada logo depois.
 
 Clique com o botão direito no ícone e abra **Configurar** para ajustar o intervalo, o contador e a exibição de UDP e IPv6. O item **Sobre o Port Radar** abre os créditos e a versão.
 
@@ -80,7 +80,7 @@ O idioma acompanha a sessão do sistema. Português (`pt` e `pt_BR`), espanhol (
 
 - Uma entrada e uma unidade do contador representam um par **protocolo + porta**. Endereços IPv4 e IPv6 da mesma porta ficam agrupados; TCP e UDP continuam separados. O contador respeita as opções de UDP e IPv6, mas não muda com a busca ou o filtro temporário do menu.
 - TCP mostra sockets em estado `LISTEN`. UDP mostra sockets locais sem conexão; UDP não possui o estado TCP `LISTEN`.
-- Quando o Linux não fornece nome e PID, a lista mostra apenas a porta e o protocolo; os endereços ficam nos detalhes. A falta desses dados não gera avisos permanentes nem campos vazios. Isso é comum para processos de outro usuário e portas publicadas pelo Docker/DDEV. O applet não confunde o PID de um contêiner com o processo que escuta no host.
+- Quando o Linux não fornece nome e PID, a lista mostra apenas a porta e o protocolo; os endereços ficam nos detalhes. A falta desses dados não gera avisos permanentes nem campos vazios. Isso é comum para processos de outro usuário e portas publicadas pelo Docker. O applet não confunde o PID de um contêiner com o processo que escuta no host.
 - **Outras interfaces** inclui endereços que não são loopback. Isso não comprova acesso pela internet: firewall, roteamento e configuração do serviço também importam.
 - O histórico fica apenas na memória e representa diferenças entre consultas. Um socket que abre e fecha entre duas consultas pode não aparecer.
 - Durante uma falha, a lista é ocultada e o contador mostra `!`, quando habilitado. O histórico anterior é mantido.
@@ -116,11 +116,7 @@ port-radar@pedropaulo/
 Verificações rápidas, a partir da raiz do repositório:
 
 ```bash
-cjs port-radar@pedropaulo/tests/parser-tests.js
-cjs port-radar@pedropaulo/tests/scanner-tests.js
-cjs port-radar@pedropaulo/tests/changes-tests.js
-cjs port-radar@pedropaulo/tests/module-loading-tests.js
-cjs port-radar@pedropaulo/tests/refresh-tests.js
+bash port-radar@pedropaulo/tests/run-tests.sh
 ```
 
 Antes de publicar uma versão, confira no Cinnamon: abrir o menu, buscar e filtrar, mudar as configurações, atualizar a lista, abrir **Sobre** e remover/adicionar o applet. Confira também os idiomas nas sessões correspondentes. Os testes de módulos não substituem essa validação.

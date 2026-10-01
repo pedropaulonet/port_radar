@@ -40,8 +40,8 @@ function compareSnapshots(previous, current) {
             changes.push({ type: "closed", record: oldEndpoints[key][0], key: key });
     });
 
-    // Treat an address move as one event only when there is one socket on each side.
-    // With several bindings, keep the individual open/close events instead of guessing.
+    // Infer an address move only for a single binding with the same known owner.
+    // Missing owners or replacements must keep their separate open/close events.
     let bindingKey = function (record) {
         return [record.protocol, record.family, record.port].join("|");
     };
@@ -52,7 +52,8 @@ function compareSnapshots(previous, current) {
             return;
         let before = oldBindings[key][0];
         let after = newBindings[key][0];
-        if (before.address !== after.address) {
+        if (before.address !== after.address && before.processes.length > 0 &&
+            ownershipSignature([before]) === ownershipSignature([after])) {
             changes = changes.filter(function (change) {
                 return change.key !== Model.socketEndpointKey(before) && change.key !== Model.socketEndpointKey(after);
             });

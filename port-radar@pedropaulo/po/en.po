@@ -210,3 +210,14 @@ msgstr "Maximum number of ports shown in the menu"
 
 msgid "Show the number of ports in use in the panel"
 msgstr "Show the number of ports in use in the panel"
+
+msgid "Copy port"
+msgstr "Copy port"
+
+#, javascript-format
+msgid "Copy address: %s"
+msgstr "Copy address: %s"
+
+#, javascript-format
+msgid "Copy PID: %d"
+msgstr "Copy PID: %d"

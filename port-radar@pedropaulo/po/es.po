@@ -210,3 +210,14 @@ msgstr "Límite de puertos visibles en el menú"
 
 msgid "Show the number of ports in use in the panel"
 msgstr "Mostrar la cantidad de puertos en uso en el panel"
+
+msgid "Copy port"
+msgstr "Copiar puerto"
+
+#, javascript-format
+msgid "Copy address: %s"
+msgstr "Copiar dirección: %s"
+
+#, javascript-format
+msgid "Copy PID: %d"
+msgstr "Copiar PID: %d"

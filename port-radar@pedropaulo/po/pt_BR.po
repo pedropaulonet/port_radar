@@ -210,3 +210,14 @@ msgstr "Limite de portas exibidas no menu"
 
 msgid "Show the number of ports in use in the panel"
 msgstr "Mostrar a quantidade de portas em uso no painel"
+
+msgid "Copy port"
+msgstr "Copiar porta"
+
+#, javascript-format
+msgid "Copy address: %s"
+msgstr "Copiar endereço: %s"
+
+#, javascript-format
+msgid "Copy PID: %d"
+msgstr "Copiar PID: %d"

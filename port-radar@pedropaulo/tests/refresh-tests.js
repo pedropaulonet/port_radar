@@ -64,4 +64,35 @@ applet._scanError = null;
 String.prototype.format = imports.format.format;
 AppletClass.prototype._updatePanelLabel.call(applet);
 check(panelLabel === '1', 'Panel counts grouped ports instead of sockets');
+// A failed query must retain the snapshot but expose the error without a counter.
+let tooltip;
+applet.set_applet_tooltip = text => { tooltip = text; };
+applet.showCount = false;
+callbacks[2]([], { code: 'scan-failed', message: 'netlink permission denied' });
+AppletClass.prototype._updatePanelLabel.call(applet);
+check(panelLabel === '' && tooltip.includes('Could not read local ports') && !tooltip.includes('ports in use'),
+    'A failed scan must not present the old count as current in the tooltip');
+check(loggedErrors.some(error => error.message.includes('netlink permission denied')),
+    'Scan diagnostics must include the underlying error in the Cinnamon log');
+check(applet._records.length === 3, 'An error must preserve the last successful snapshot');
+applet.refresh();
+callbacks[3]([], null);
+AppletClass.prototype._updatePanelLabel.call(applet);
+check(!applet._scanError && tooltip.includes('0 ports in use'),
+    'A successful retry must clear the error state');
+applet.refresh();
+// Removing twice must release resources only once, and ignore outstanding replies.
+let cancelled = 0, finalized = 0, menuDestroyed = 0;
+applet._scanTimer = null;
+applet._scanner.cancel = () => { cancelled++; };
+applet.settings = { finalize() { finalized++; } };
+applet.menu = { close() {}, destroy() { menuDestroyed++; } };
+const rendersBeforeRemoval = renders;
+applet.on_applet_removed_from_panel();
+check(menuDestroyed === 1, 'Removal must destroy the popup attached to Cinnamon');
+applet.on_applet_removed_from_panel();
+check(cancelled === 1 && finalized === 1 && menuDestroyed === 1,
+    'Repeated removal must not finalize or destroy resources twice');
+callbacks[4]([record], null);
+check(renders === rendersBeforeRemoval, 'A reply after removal must not touch the UI');
 print('refresh-tests: PASS');
